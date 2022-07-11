@@ -7,7 +7,7 @@ async def onReady(self: Setup):
         status=discord.Status.online,
         activity=discord.Activity(
             type=discord.ActivityType.watching,
-            name="A discord.py Workshop"
+            name="Hollitizz#0111"
         )
     )
     print(f"{self.user} is Ready !")

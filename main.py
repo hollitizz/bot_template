@@ -27,7 +27,7 @@ class Setup(commands.Bot):
         for cogName, cog in inspect.getmembers(cogs):
             if inspect.isclass(cog):
                 await self.load_extension(f"cogs.{cogName}")
-               await bot.tree.sync(guild=discord.Object(id=self.guild_id))
+                await bot.tree.sync(guild=discord.Object(id=self.guild_id))
 
     async def on_ready(self):
         await onReady(self)
