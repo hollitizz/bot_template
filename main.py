@@ -10,7 +10,7 @@ import logging
 import cogs
 
 from utils.DbHandler import DbHandler
-from events import onReady, onMemberJoin
+from events import onReady, onMemberJoin, onMemberLeave
 
 
 dotenv.load_dotenv()
@@ -40,7 +40,7 @@ class Setup(commands.Bot, DbHandler):
         await onMemberJoin.onMemberJoin(self, member)
 
     async def on_raw_member_remove(self, payload: discord.RawMemberRemoveEvent):
-        await onMemberJoin.onMemberLeave(self, payload)
+        await onMemberLeave.onMemberLeave(self, payload)
 
 try:
     bot = Setup()
