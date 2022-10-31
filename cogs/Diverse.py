@@ -1,11 +1,10 @@
-from audioop import add
 import logging
 from discord.ext import commands
-from discord import app_commands, Interaction, Object, Member
+from discord import app_commands, Interaction, Object
 
 from utils.types import Setup
 
-from commands.diverse import ping, add_whitelist
+from commands.diverse import ping
 
 _logger = logging.getLogger(__name__)
 
