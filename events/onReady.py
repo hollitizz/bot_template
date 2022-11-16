@@ -1,3 +1,4 @@
+import logging
 import discord
 
 from utils.types import Setup
@@ -10,4 +11,4 @@ async def onReady(self: Setup):
             name="Idk"
         )
     )
-    print(f"{self.user} is Ready !")
+    logging.info(f"{self.user} is Ready !")
