@@ -4,7 +4,7 @@ from discord import app_commands, Interaction, Object
 
 from utils.types import Setup
 
-from commands.diverse import ping
+from commands.diverse import ping, help
 
 _logger = logging.getLogger(__name__)
 
