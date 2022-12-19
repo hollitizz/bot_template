@@ -1,6 +1,5 @@
-from dis import dis, disco
 import discord
-from discord.ext import commands
+from discord.ext.commands import Bot
 import os
 import inspect
 import dotenv
@@ -9,20 +8,23 @@ import logging
 
 import cogs
 
-from utils.DbHandler import DbHandler
+from utils.SQLRequests import SQLRequests
 from events import onReady, onMemberJoin, onMemberLeave
 
 
 dotenv.load_dotenv()
 discord.utils.setup_logging()
 
-class Setup(commands.Bot):
+class Setup(Bot):
     def __init__(self):
         self.bot_id: int = int(os.getenv("BOT_ID"))
         self.token: str = os.getenv("TOKEN")
         self.guild_id: int = int(os.getenv("GUILD_ID"))
-        super().__init__("!", intents=discord.Intents.all(), application_id=self.bot_id)
-        # DbHandler.__init__(self, "./memberWhitelist.json")
+        super().__init__(command_prefix="!", intents=discord.Intents.all(), application_id=self.bot_id)
+        try :
+            self.db = SQLRequests()
+        except:
+            self.db = None
 
     async def setup_hook(self):
         self.session = aiohttp.ClientSession
@@ -35,6 +37,7 @@ class Setup(commands.Bot):
 
     async def on_ready(self):
         await onReady.onReady(self)
+        print(self.db.getTables())
 
     async def on_member_join(self, member: discord.Member):
         await onMemberJoin.onMemberJoin(self, member)
