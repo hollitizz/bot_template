@@ -38,7 +38,7 @@ class Setup(commands.Bot):
                 await self.load_extension(f"cogs.{cogName}")
                 await self.tree.sync(guild=discord.Object(id=self.guild_id))
                 logging.info(f"{cogName} commands loaded!")
-        if os.path.isdir(os.getenv("DB_SAVE_PATH")):
+        if os.path.isdir(os.getenv("DB_SAVE_PATH")) and self.db is not None:
             self.exportDataBaseTask.start()
         else:
             logging.warning(f"DB_SAVE_PATH is not a valid directory, auto save task is disabled")
