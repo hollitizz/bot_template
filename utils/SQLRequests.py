@@ -1,10 +1,6 @@
 from mysql.connector import MySQLConnection
 from mysql.connector.connection import CursorBase
 import os
-from logging import getLogger
-
-
-_logger = getLogger(__name__)
 
 
 class SQLRequests(MySQLConnection):

@@ -1,21 +1,25 @@
+import subprocess
+from time import sleep
 import discord
-from discord.ext.commands import Bot
+from discord.ext import commands, tasks
 import os
 import inspect
 import dotenv
 import aiohttp
 import logging
-
+from datetime import date, datetime
 import cogs
 
 from utils.SQLRequests import SQLRequests
 from events import onReady, onMemberJoin, onMemberLeave
+from utils.cleanSaveFolder import cleanSaveFolder
+from utils.exportDatabase import exportDataBase
 
 
 dotenv.load_dotenv()
 discord.utils.setup_logging()
 
-class Setup(Bot):
+class Setup(commands.Bot):
     def __init__(self):
         self.bot_id: int = int(os.getenv("BOT_ID"))
         self.token: str = os.getenv("TOKEN")
@@ -32,12 +36,24 @@ class Setup(Bot):
             if inspect.isclass(cog):
                 logging.info(f"Loading {cogName} commands...")
                 await self.load_extension(f"cogs.{cogName}")
-                await bot.tree.sync(guild=discord.Object(id=self.guild_id))
+                await self.tree.sync(guild=discord.Object(id=self.guild_id))
                 logging.info(f"{cogName} commands loaded!")
+        if os.path.isdir(os.getenv("DB_SAVE_PATH")):
+            self.exportDataBaseTask.start()
+        else:
+            logging.warning(f"DB_SAVE_PATH is not a valid directory, auto save task is disabled")
+
+    @tasks.loop(hours=24)
+    async def exportDataBaseTask(self):
+        exportDataBase()
+        cleanSaveFolder()
+
+    @exportDataBaseTask.before_loop
+    async def before_exportDataBaseTask(self):
+        await self.wait_until_ready()
 
     async def on_ready(self):
         await onReady.onReady(self)
-        print(self.db.getTables())
 
     async def on_member_join(self, member: discord.Member):
         await onMemberJoin.onMemberJoin(self, member)
@@ -45,8 +61,16 @@ class Setup(Bot):
     async def on_raw_member_remove(self, payload: discord.RawMemberRemoveEvent):
         await onMemberLeave.onMemberLeave(self, payload)
 
-try:
-    bot = Setup()
-    bot.run(bot.token, reconnect=True, log_handler=None)
-except KeyboardInterrupt:
-    print("\nExiting...")
+
+def main():
+    try:
+        bot = Setup()
+        bot.run(bot.token, reconnect=True, log_handler=None)
+    except KeyboardInterrupt:
+        print("\nExiting...")
+        bot.session.close()
+        bot.db.close()
+
+if __name__ == "__main__":
+    main()
+
