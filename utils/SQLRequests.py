@@ -14,12 +14,16 @@ class SQLRequests(MySQLConnection):
         self.__cursor: CursorBase = self.cursor()
 
     def __clearCache(self):
+        self.connect()
         try:
             self.__cursor.fetchall()
         except:
             pass
 
     def getTables(self) -> 'list[str]':
+        request = f"""
+            SHOW TABLES
+        """
         self.__clearCache()
-        self.__cursor.execute("SHOW TABLES")
-        return self.__cursor.fetchall()
+        self.__cursor.execute(request)
+        return [i[0] for i in self.__cursor.fetchall()]
