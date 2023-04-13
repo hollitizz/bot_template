@@ -2,7 +2,7 @@ import logging
 from discord.ext import commands
 from discord import app_commands, Interaction, Object
 
-from utils.types import Setup
+from utils.types import BotType
 
 from commands.diverse import ping, help
 
@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 
 
 class Diverse(commands.Cog, description="Groupe de commande Divers"):
-    def __init__(self, bot: Setup):
+    def __init__(self, bot: BotType):
         self.bot = bot
 
     @app_commands.command(name="ping", description="Répond avec \"Pong !\"")
@@ -23,5 +23,5 @@ class Diverse(commands.Cog, description="Groupe de commande Divers"):
         await help.help(self.bot, ctx)
 
 
-async def setup(bot: Setup):
+async def BotType(bot: BotType):
     await bot.add_cog(Diverse(bot), guilds=[Object(id=bot.guild_id)])

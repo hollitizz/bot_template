@@ -4,7 +4,7 @@ import os
 
 from utils.SQLRequests import SQLRequests
 
-class Setup(commands.Bot, SQLRequests):
+class BotType(commands.Bot, SQLRequests):
     def __init__(self):
         self.bot_id: int = int(os.getenv("BOT_ID"))
         self.token: str = os.getenv("TOKEN")
