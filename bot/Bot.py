@@ -32,7 +32,7 @@ class Bot(commands.Bot):
                 await self.load_extension(f"cogs.{cogName}")
         await self.tree.sync()
         _logger.info("Commands loaded")
-    # uncomment those lines if you use a database
+    # uncomment those lines if you use a database and want to export it every hour
         # self.exportDataBaseTask.start()
 
     # @tasks.loop(hours=1)
