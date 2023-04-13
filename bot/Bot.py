@@ -1,5 +1,5 @@
 from utils.SQLRequests import SQLRequests
-from events import onReady, onMemberJoin, onMemberLeave, onGuildJoin, onGuildRemove
+from events import onReady, onMemberJoin, onMemberLeave, onGuildJoin, onGuildLeave
 from utils.exportDatabase import exportDataBase
 import cogs
 import os
@@ -56,4 +56,4 @@ class Bot(commands.Bot):
         await onGuildJoin.onGuildJoin(self, guild)
 
     async def on_guild_remove(self, guild: discord.Guild):
-        await onGuildRemove.onGuildRemove(self, guild)
+        await onGuildLeave.onGuildLeave(self, guild)
